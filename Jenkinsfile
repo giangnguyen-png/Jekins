@@ -2,9 +2,8 @@ pipeline {
   agent any
 
   environment {
-    DOCKER_IMAGE = 'jenkins-demo'
+    DOCKER_IMAGE = 'nguyenjun/jenkins-demo'
     DOCKER_TAG = "${BUILD_NUMBER}"
-    REGISTRY = 'docker.io'
   }
 
   stages {
@@ -28,7 +27,7 @@ pipeline {
     stage('Build Image') {
       steps {
         script {
-          docker.build("${REGISTRY}/nguyenjun/${DOCKER_IMAGE}:${DOCKER_TAG}")
+          docker.build("${DOCKER_IMAGE}:${DOCKER_TAG}")
         }
       }
     }
@@ -39,8 +38,8 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry("https://${REGISTRY}", 'dockerhub-creds') {
-            docker.image("${REGISTRY}/nguyenjun/${DOCKER_IMAGE}:${DOCKER_TAG}").push()
+          docker.withRegistry('', 'dockerhub-creds') {
+            docker.image("${DOCKER_IMAGE}:${DOCKER_TAG}").push()
           }
         }
       }
