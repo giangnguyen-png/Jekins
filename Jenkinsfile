@@ -1,14 +1,24 @@
+# 
 pipeline {
-  agent any
+  agent {
+    docker {
+      image 'node:18-alpine'
+    }
+  }
   stages {
-    stage('Hello') {
+    stage('Install') {
       steps {
-        echo 'Hello, World!'
+        sh 'npm install'
       }
     }
-    stage('Env') {
+    stage('Lint') {
       steps {
-        sh 'printenv'
+        sh 'npm run lint'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'npm test'
       }
     }
   }
